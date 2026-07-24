@@ -568,40 +568,89 @@
                 videosContainer.appendChild(card);
             });
 
+            // منطق استخراج الصورة من إطار الفيديو (معدل خصيصاً لدعم أجهزة iPhone و Safari)
             function extractThumbnail(videoUrl) {
                 return new Promise((resolve, reject) => {
                     const videoElem = document.createElement('video');
-                    videoElem.style.display = 'none';
+                    // إخفاء الفيديو تماماً بطريقة يقبلها سفاري
+                    videoElem.style.cssText = 'position: fixed; top: -9999px; left: -9999px; width: 1px; height: 1px; opacity: 0;';
                     videoElem.muted = true;
-                    // تحسينات جوهرية لتوافق استخراج الصور عبر متصفح Safari على iPhone
                     videoElem.setAttribute('playsinline', '');
                     videoElem.setAttribute('webkit-playsinline', '');
-                    videoElem.crossOrigin = 'anonymous'; 
-                    videoElem.preload = 'metadata';
-                    videoElem.src = videoUrl;
+                    videoElem.crossOrigin = 'anonymous';
+                    
+                    // 1. مهم جداً لسفاري: يجب أن يكون auto ليقوم بتحميل بيانات الصورة
+                    videoElem.preload = 'auto'; 
+                    
+                    // 2. اختصار مدعوم في متصفحات الجوال للذهاب للثانية 1 مباشرة
+                    videoElem.src = videoUrl + '#t=1'; 
 
-                    videoElem.addEventListener('loadedmetadata', () => {
-                        videoElem.currentTime = Math.min(1, Math.max(0.1, videoElem.duration / 2 || 0));
-                    });
+                    let isExtracted = false;
 
-                    videoElem.addEventListener('seeked', () => {
+                    const drawFrame = () => {
+                        if (isExtracted || videoElem.videoWidth === 0) return;
                         try {
                             const canvas = document.createElement('canvas');
                             canvas.width = videoElem.videoWidth || 640;
                             canvas.height = videoElem.videoHeight || 360;
                             const ctx = canvas.getContext('2d');
                             ctx.drawImage(videoElem, 0, 0, canvas.width, canvas.height);
-                            resolve(canvas.toDataURL('image/jpeg', 0.7));
+                            
+                            const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
+                            
+                            // 3. التحقق من أن سفاري لم يرسم إطاراً أسود/فارغاً
+                            if (dataUrl.length > 5000) { 
+                                isExtracted = true;
+                                resolve(dataUrl);
+                                cleanUp();
+                            }
                         } catch (e) {
+                            if(!isExtracted) {
+                                isExtracted = true;
+                                reject(e);
+                                cleanUp();
+                            }
+                        }
+                    };
+
+                    const cleanUp = () => {
+                        videoElem.pause();
+                        videoElem.removeAttribute('src');
+                        videoElem.load();
+                        if (videoElem.parentNode) {
+                            videoElem.parentNode.removeChild(videoElem);
+                        }
+                    };
+
+                    // 4. مهم جداً لـ iOS: إضافة العنصر للصفحة وإلا لن يقوم المتصفح بتحضير الإطارات المرئية
+                    document.body.appendChild(videoElem);
+
+                    // الاعتماد على أحداث التشغيل التي يستجيب لها Safari
+                    videoElem.addEventListener('canplay', drawFrame);
+                    videoElem.addEventListener('loadeddata', () => {
+                        // محاولة يدوية إضافية إذا لم يستجب Safari للرابط المختصر
+                        videoElem.currentTime = 1; 
+                    });
+                    videoElem.addEventListener('seeked', drawFrame);
+                    videoElem.addEventListener('playing', drawFrame);
+                    
+                    videoElem.addEventListener('error', (e) => {
+                        if(!isExtracted) {
+                            isExtracted = true;
                             reject(e);
-                        } finally {
-                            videoElem.pause();
-                            videoElem.removeAttribute('src');
-                            videoElem.load();
+                            cleanUp();
                         }
                     });
 
-                    videoElem.addEventListener('error', (e) => reject(e));
+                    // 5. إجبار Safari على قراءة الإطار عبر أمر تشغيل صامت ومخفي
+                    const playPromise = videoElem.play();
+                    if (playPromise !== undefined) {
+                        playPromise.then(() => {
+                            setTimeout(drawFrame, 300); // مهلة بسيطة ليتمكن Safari من رسم الصورة
+                        }).catch(() => {
+                            // تجاهل خطأ التشغيل التلقائي إن حدث، سيعتمد على الأحداث الأخرى
+                        });
+                    }
                 });
             }
 
