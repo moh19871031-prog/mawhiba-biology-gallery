@@ -34,7 +34,18 @@
             overflow-x: hidden;
             line-height: 1.6;
         }
+/* منع الزوار من تحديد النصوص أو سحب الصور */
+        body {
+            -webkit-user-select: none; /* لأجهزة آبل وسفاري */
+            -ms-user-select: none; /* لمتصفحات إيدج */
+            user-select: none; /* للمتصفحات القياسية */
+            -webkit-touch-callout: none; /* لمنع ظهور القائمة عند الضغط المطول في الآيفون */
+        }
 
+        /* منع التفاعل مع الصور لعدم سحبها وحفظها */
+        img {
+            pointer-events: none; 
+        }
         #scroll-progress {
             position: fixed;
             top: 0;
@@ -803,6 +814,25 @@ async function updateVisitorCounter() {
 }
 
 updateVisitorCounter();
+    </script>
+    <!-- سكربت حماية الكود ومنع النسخ -->
+    <script>
+        // منع النقر بالزر الأيمن (لإخفاء خيار عرض مصدر الصفحة)
+        document.addEventListener('contextmenu', event => event.preventDefault());
+
+        // منع اختصارات لوحة المفاتيح الخاصة بالمطورين والنسخ
+        document.onkeydown = function(e) {
+            // منع زر F12
+            if (e.keyCode == 123) { return false; }
+            // منع Ctrl+Shift+I (أدوات المطور)
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 73) { return false; }
+            // منع Ctrl+Shift+J (وحدة التحكم)
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 74) { return false; }
+            // منع Ctrl+U (عرض مصدر الصفحة)
+            if (e.ctrlKey && e.keyCode == 85) { return false; }
+            // منع Ctrl+S (حفظ الصفحة)
+            if (e.ctrlKey && e.keyCode == 83) { return false; }
+        };
     </script>
 </body>
 </html>
