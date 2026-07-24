@@ -738,6 +738,7 @@
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             });
 
+            // تأثيرات الحركة عند التمرير
             const revealElements = document.querySelectorAll('.reveal');
             
             const revealObserver = new IntersectionObserver((entries, observer) => {
@@ -750,7 +751,8 @@
                         observer.unobserve(entry.target);
                     }
                 });
-            }, { threshold: 0.15 });
+            // تم التعديل هنا: تقليل النسبة إلى 0.01 وإضافة هامش لضمان ظهور الأقسام الطويلة جداً على الجوال
+            }, { threshold: 0.01, rootMargin: "0px 0px -50px 0px" });
 
             revealElements.forEach(el => revealObserver.observe(el));
 
