@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- إضافة لون الثيم لدعم المتصفحات والأجهزة المحمولة (Safari/Chrome) -->
+    <meta name="theme-color" content="#5c2483">
     <title>معرض برنامج موهبة الإثرائي الأكاديمي</title>
-    <!-- استدعاء خط Cairo من Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-purple: #5c2483;      /* لون موهبة البنفسجي الأساسي */
-            --dark-purple: #3a1554;         /* بنفسجي غامق */
-            --light-purple: #9d5abf;        /* بنفسجي فاتح */
+            --primary-purple: #5c2483;
+            --dark-purple: #3a1554;
+            --light-purple: #9d5abf;
             --white: #ffffff;
             --off-white: #f5f5f7;
             --text-dark: #1d1d1f;
@@ -34,7 +35,6 @@
             line-height: 1.6;
         }
 
-        /* Scroll Progress Bar */
         #scroll-progress {
             position: fixed;
             top: 0;
@@ -46,7 +46,6 @@
             transition: width 0.1s ease-out;
         }
 
-        /* Loading Screen */
         #loader {
             position: fixed;
             top: 0;
@@ -70,7 +69,6 @@
         }
         @keyframes spin { 100% { transform: rotate(360deg); } }
 
-        /* Typography & Utilities */
         h1, h2, h3 { color: var(--primary-purple); margin-bottom: 20px; font-weight: 700; }
         .section-title { text-align: center; font-size: 2.5rem; margin-bottom: 3rem; position: relative; padding-bottom: 15px; }
         .section-title::after {
@@ -88,7 +86,6 @@
         
         .container { width: 90%; max-width: 1200px; margin: 0 auto; padding: 5rem 0; }
         
-        /* Glassmorphism Classes */
         .glass-card {
             background: var(--glass-bg);
             backdrop-filter: blur(12px);
@@ -104,7 +101,6 @@
             box-shadow: 0 15px 40px 0 rgba(92, 36, 131, 0.2);
         }
 
-        /* Buttons */
         .btn {
             display: inline-block;
             padding: 12px 30px;
@@ -124,7 +120,6 @@
             box-shadow: 0 6px 20px rgba(92,36,131,0.5);
         }
 
-        /* Hero Section */
         .hero {
             height: 100vh;
             display: flex;
@@ -159,31 +154,25 @@
         .hero h1 { color: var(--white); font-size: 3.5rem; margin-bottom: 10px; font-weight: 900; }
         .hero h2 { color: var(--light-purple); font-size: 2rem; margin-bottom: 30px; font-weight: 400; }
 
-        /* Animation Classes (Intersection Observer) */
         .reveal { opacity: 0; transform: translateY(50px); transition: all 0.8s cubic-bezier(0.5, 0, 0, 1); }
         .reveal.active { opacity: 1; transform: translateY(0); }
         .zoom-reveal { opacity: 0; transform: scale(0.9); transition: all 0.8s cubic-bezier(0.5, 0, 0, 1); }
         .zoom-reveal.active { opacity: 1; transform: scale(1); }
 
-        /* Sections */
         .about-section { text-align: center; max-width: 800px; margin: 0 auto; }
         
-        /* Stats Section */
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; text-align: center; margin-top: 40px; }
         .stat-item { padding: 30px; }
         .stat-number { font-size: 3.5rem; font-weight: 900; color: var(--primary-purple); display: block; margin-bottom: 10px; }
         .stat-label { font-size: 1.2rem; font-weight: 600; color: var(--text-gray); }
 
-        /* Grid Layouts for Projects/Videos */
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px; }
         
-        /* Project Cards */
         .project-card { display: flex; flex-direction: column; justify-content: space-between; height: 100%; }
         .project-card h3 { font-size: 1.4rem; color: var(--dark-purple); }
         .project-card p { font-size: 1rem; color: var(--text-gray); flex-grow: 1; }
         .project-card .btn { align-self: flex-start; margin-top: 15px; font-size: 0.9rem; padding: 8px 20px; }
 
-        /* Video Cards */
         .video-card { cursor: pointer; text-align: center; position: relative; overflow: hidden; }
         .video-thumbnail-placeholder {
             width: 100%;
@@ -215,7 +204,6 @@
         }
         .video-card:hover .play-icon { transform: scale(1.1); background: var(--white); box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
 
-        /* Modal for Videos */
         .modal {
             display: none;
             position: fixed;
@@ -247,11 +235,9 @@
         .close-modal:hover { color: var(--light-purple); }
         .modal video { width: 100%; height: 100%; border: none; outline: none; border-radius: 10px; background: #000; }
 
-        /* Padlet Section */
         .padlet-container { width: 100%; height: 600px; border-radius: 20px; overflow: hidden; box-shadow: var(--glass-shadow); }
-        .padlet-container iframe { width: 100%; height: 100%; border: none; }
+        .padlet-container iframe { width: 100%; height: 100%; }
 
-        /* Honor Roll */
         .honor-roll-list { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; }
         .honor-badge {
             background: var(--white);
@@ -265,7 +251,6 @@
         }
         .honor-badge:hover { background: var(--primary-purple); color: var(--white); transform: translateY(-5px); }
 
-        /* Footer */
         footer {
             background: var(--dark-purple);
             color: var(--white);
@@ -282,7 +267,6 @@
         .footer-content p { color: #d1b3e0; font-size: 1rem; margin-bottom: 5px; }
         .copyright { margin-top: 30px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); color: #a980c2; font-size: 0.9rem; }
 
-        /* Back to Top */
         #back-to-top {
             position: fixed; bottom: 30px; right: 30px;
             width: 50px; height: 50px;
@@ -296,7 +280,6 @@
         #back-to-top.show { opacity: 1; visibility: visible; }
         #back-to-top:hover { transform: translateY(-5px); background: var(--dark-purple); }
 
-        /* Responsive */
         @media (max-width: 768px) {
             .hero h1 { font-size: 2.2rem; }
             .hero h2 { font-size: 1.4rem; }
@@ -308,26 +291,22 @@
 </head>
 <body>
 
-    <!-- شريط تقدم التمرير -->
     <div id="scroll-progress"></div>
 
-    <!-- شاشة التحميل -->
     <div id="loader">
         <div class="spinner"></div>
     </div>
 
-    <!-- النافذة المنبثقة للفيديوهات -->
     <div class="modal" id="videoModal">
-        <span class="close-modal" id="closeModal">&times;</span>
+        <!-- تم إضافة سمات الوصول role و aria-label و tabindex لتسهيل التنقل بلوحة المفاتيح -->
+        <span class="close-modal" id="closeModal" role="button" aria-label="إغلاق النافذة" tabindex="0">&times;</span>
         <div class="modal-content" id="modalContent">
-            <!-- سيتم حقن كود video هنا عبر JavaScript -->
         </div>
     </div>
 
-    <!-- زر العودة للأعلى -->
-    <a href="#" id="back-to-top">&uarr;</a>
+    <!-- تم إضافة aria-label لزر العودة للأعلى بسبب خلوه من النص التوضيحي -->
+    <a href="#" id="back-to-top" aria-label="العودة للأعلى">&uarr;</a>
 
-    <!-- القسم الرئيسي (Hero) -->
     <header class="hero">
         <div class="hero-content">
             <h1>معرض برنامج موهبة الإثرائي الأكاديمي</h1>
@@ -343,7 +322,6 @@
         </div>
     </header>
 
-    <!-- نبذة عن البرنامج -->
     <section id="about" class="container reveal">
         <div class="glass-card about-section">
             <h2 class="section-title">نبذة عن البرنامج</h2>
@@ -353,7 +331,6 @@
         </div>
     </section>
 
-    <!-- رسالة ترحيبية -->
     <section class="container reveal zoom-reveal">
         <div class="glass-card" style="text-align: center;">
             <h2 class="section-title">رسالة ترحيبية</h2>
@@ -366,7 +343,6 @@
         </div>
     </section>
 
-    <!-- الإحصائيات -->
     <section class="container reveal">
         <h2 class="section-title">إحصائيات البرنامج</h2>
         <div class="stats-grid">
@@ -385,43 +361,36 @@
         </div>
     </section>
 
-    <!-- لوحة الشرف -->
     <section class="container reveal">
         <div class="glass-card">
             <h2 class="section-title">لوحة الشرف</h2>
             <p style="text-align: center; margin-bottom: 30px;">نعتز بجميع طلابنا الموهوبين الذين شاركوا في هذا البرنامج المميز.</p>
             <div class="honor-roll-list" id="honorRollContainer">
-                <!-- سيتم حقن أسماء الطلاب هنا -->
             </div>
         </div>
     </section>
 
-    <!-- معرض المشاريع -->
     <section class="container reveal">
         <h2 class="section-title">معرض المشاريع (19 مشروع)</h2>
         <div class="grid" id="projectsContainer">
-            <!-- سيتم حقن المشاريع هنا عبر JavaScript -->
         </div>
     </section>
 
-    <!-- معرض الفيديوهات -->
     <section class="container reveal">
         <h2 class="section-title">معرض الفيديوهات (37 فيديو)</h2>
         <div class="grid" id="videosContainer">
-            <!-- سيتم حقن الفيديوهات هنا عبر JavaScript -->
         </div>
     </section>
 
-    <!-- معرض Padlet -->
     <section class="container reveal zoom-reveal">
         <h2 class="section-title">إبداعات الطلاب (Padlet)</h2>
         <p style="text-align: center; margin-bottom: 30px;">أكثر من 608 عمل وصورة وفيديو وتعليق تم جمعها في لوحة التفاعل.</p>
         <div class="padlet-container" id="padletContainer">
-            <iframe id="padletIframe" frameborder="0" allow="camera;microphone;geolocation"></iframe>
+            <!-- تمت إزالة frameborder ووضع التنسيق كـ CSS، وإضافة title و loading -->
+            <iframe id="padletIframe" allow="camera;microphone;geolocation" title="لوحة تفاعل الطلاب" loading="lazy" style="border: none;"></iframe>
         </div>
     </section>
 
-    <!-- رسالة شكر -->
     <section class="container reveal">
         <div class="glass-card about-section">
             <h2 class="section-title">رسالة شكر</h2>
@@ -430,7 +399,6 @@
             </p>
         </div>
     </section>
-    <!-- ===== رأيكم يصنع الفرق ===== -->
 
 <section id="feedback" class="section">
     <div class="container">
@@ -446,20 +414,21 @@
             box-shadow:0 15px 40px rgba(0,0,0,.12);
             margin-top:30px;
         ">
-
+            <!-- تمت إزالة الخصائص الملغاة في HTML5 مثل frameborder, marginheight واستبدالها بـ CSS -->
             <iframe
                 src="https://docs.google.com/forms/d/e/1FAIpQLScB-ogzsG3CaVWITE73Jrb8QYCUrOKU49GcXTGgGChTAuA8wg/viewform?embedded=true"
                 width="100%"
                 height="1924"
-                frameborder="0"
-                marginheight="0"
-                marginwidth="0">
+                title="نموذج تقييم المعرض"
+                loading="lazy"
+                style="border: none; margin: 0;">
                 جارٍ التحميل…
             </iframe>
 
         </div>
     </div>
 </section>
+
 <div style="text-align:center;margin:20px 0;">
     <div style="
         display:inline-flex;
@@ -477,7 +446,7 @@
         <span id="visitor-count">0</span>
     </div>
 </div>
-    <!-- التذييل (Footer) -->
+
     <footer>
         <div class="footer-content">
             <h3>برنامج موهبة الإثرائي الأكاديمي</h3>
@@ -493,63 +462,55 @@
         </div>
     </footer>
 
-    <!-- JavaScript المدمج -->
     <script>
-        // رابط Padlet المركزي
         const PADLET_URL = "https://padlet.com/embed/s19nnep4u94hryg1/slideshow?autoplay=1&loop=1&duration=2";
 
         const SITE_DATA = {
-            // بيانات المشاريع
             projects: Array.from({length: 19}, (_, i) => ({
                 title: `مشاريع الأبطال ${i + 1}`,
                 file: `projects/project${i + 1}.pdf`
             })),
 
-            // بيانات الفيديوهات
             videos: Array.from({length: 37}, (_, i) => ({
                 title: `منجزات الأبطال ${String(i + 1).padStart(2, '0')}`,
                 file: `videos/video${i + 1}.mp4`
             })),
 
-            // أسماء لوحة الشرف
             honorRoll: [
-    "🏅 الدكتور إبراهيم محمد قاسم",
-    "🏅 الدكتور إيساف إبراهيم مسعود",
-    "🏅 الضابط تركي عبدالله حدادي",
-    "🏅 الدكتور حسين علي الحسين",
-    "🏅 المحامي خالد حسن عشري",
-    "🏅 الدكتور راكان حسن حامظي",
-    "🏅 الدكتور سعيد سلطان الأكلبي",
-    "🏅 الأستاذ سلطان سعيد الطف",
-    "🏅 المهندس صالح علي الشلعان",
-    "🏅 المخترع عبدالعزيز محمد المقرب",
-    "🏅 الدكتور عبدالله عبدالرحمن الربيعة",
-    "🏅 الدكتور عبدالملك مشبب السبيعي",
-    "🏅 الضابط عمر خضر العمراني",
-    "🏅 الدكتور غيث مرضي الزهراني",
-    "🏅 الضابط مالك سليمان الربعي",
-    "🏅 إمام الحرم محمد أنور بخش",
-    "🏅 المخترع محمد صالح النوشان",
-    "🏅 الطيار محمد يحيى الطراف",
-    "🏅 الطيار يزن أحمد الأحمدي",
-    "🏅 المهندس يزن رامي حامد",
-    "🏅 الطيار يزيد خالد الفيفي"
-]
+                "🏅 الدكتور إبراهيم محمد قاسم",
+                "🏅 الدكتور إيساف إبراهيم مسعود",
+                "🏅 الضابط تركي عبدالله حدادي",
+                "🏅 الدكتور حسين علي الحسين",
+                "🏅 المحامي خالد حسن عشري",
+                "🏅 الدكتور راكان حسن حامظي",
+                "🏅 الدكتور سعيد سلطان الأكلبي",
+                "🏅 الأستاذ سلطان سعيد الطف",
+                "🏅 المهندس صالح علي الشلعان",
+                "🏅 المخترع عبدالعزيز محمد المقرب",
+                "🏅 الدكتور عبدالله عبدالرحمن الربيعة",
+                "🏅 الدكتور عبدالملك مشبب السبيعي",
+                "🏅 الضابط عمر خضر العمراني",
+                "🏅 الدكتور غيث مرضي الزهراني",
+                "🏅 الضابط مالك سليمان الربعي",
+                "🏅 إمام الحرم محمد أنور بخش",
+                "🏅 المخترع محمد صالح النوشان",
+                "🏅 الطيار محمد يحيى الطراف",
+                "🏅 الطيار يزن أحمد الأحمدي",
+                "🏅 المهندس يزن رامي حامد",
+                "🏅 الطيار يزيد خالد الفيفي"
+            ]
         };
 
         document.addEventListener('DOMContentLoaded', () => {
             
-            // إخفاء شاشة التحميل
             setTimeout(() => {
                 const loader = document.getElementById('loader');
                 loader.style.opacity = '0';
                 setTimeout(() => loader.style.display = 'none', 800);
             }, 1000);
 
-            // إعداد رابط Padlet
             document.getElementById('padletIframe').src = PADLET_URL;
 
-            // بناء لوحة الشرف
             const honorContainer = document.getElementById('honorRollContainer');
             SITE_DATA.honorRoll.forEach(name => {
                 const span = document.createElement('span');
@@ -558,7 +519,6 @@
                 honorContainer.appendChild(span);
             });
 
-            // بناء معرض المشاريع
             const projectsContainer = document.getElementById('projectsContainer');
             SITE_DATA.projects.forEach(project => {
                 const card = document.createElement('div');
@@ -570,55 +530,57 @@
                 projectsContainer.appendChild(card);
             });
 
-            // بناء معرض الفيديوهات مع الهيكل الجديد للصور المستخرجة والتأثيرات
             const videosContainer = document.getElementById('videosContainer');
             SITE_DATA.videos.forEach((video, index) => {
                 const card = document.createElement('div');
                 card.className = 'glass-card video-card';
                 card.id = `video-card-${index}`;
+                // تم إضافة سمات الوصول للعناصر القابلة للنقر
+                card.setAttribute('role', 'button');
+                card.setAttribute('tabindex', '0');
+                card.setAttribute('aria-label', `تشغيل فيديو ${video.title}`);
                 
                 card.innerHTML = `
                     <div class="video-thumbnail-container" style="position: relative; width: 100%; height: 180px; border-radius: 10px; overflow: hidden; margin-bottom: 15px; background: #000;">
-                        
-                        <!-- الصورة المستخرجة تلقائياً (تكون مخفية حتى يتم تحميلها) -->
                         <img class="dynamic-thumbnail" style="width: 100%; height: 100%; object-fit: cover; display: none;" alt="${video.title}" />
-                        
-                        <!-- الأيقونة الاحتياطية تظهر في البداية وإذا فشل الاستخراج -->
                         <div class="video-thumbnail-placeholder fallback-placeholder" style="width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; background: linear-gradient(45deg, #e0e0e0, #f5f5f7); margin: 0; border-radius: 0;">
                             <div class="play-icon"></div>
                         </div>
-                        
-                        <!-- الطبقة الشفافة مع زر التشغيل الكبير عند المرور -->
                         <div class="video-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.25); display: flex; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.3s ease;">
                             <div class="play-icon" style="background: rgba(255,255,255,0.9); transform: scale(1.3);"></div>
                         </div>
                     </div>
-                    
                     <h3 style="font-size: 1.2rem; margin:0; position: relative; z-index: 2;">${video.title}</h3>
                 `;
                 
-                // إضافة أحداث Hover برمجياً لعدم تغيير كود CSS الأساسي
                 const overlay = card.querySelector('.video-overlay');
                 card.addEventListener('mouseenter', () => { overlay.style.opacity = '1'; });
                 card.addEventListener('mouseleave', () => { overlay.style.opacity = '0'; });
 
-                // فتح الفيديو عند الضغط
                 card.addEventListener('click', () => openVideoModal(video.file));
+                // دعم إمكانية الوصول باستخدام لوحة المفاتيح
+                card.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        openVideoModal(video.file);
+                    }
+                });
                 videosContainer.appendChild(card);
             });
 
-            // منطق استخراج الصورة من إطار الفيديو (Thumbnail)
             function extractThumbnail(videoUrl) {
                 return new Promise((resolve, reject) => {
                     const videoElem = document.createElement('video');
                     videoElem.style.display = 'none';
                     videoElem.muted = true;
-                    videoElem.playsInline = true;
-                    videoElem.preload = 'metadata'; // تحميل البيانات الوصفية فقط للأداء
+                    // تحسينات جوهرية لتوافق استخراج الصور عبر متصفح Safari على iPhone
+                    videoElem.setAttribute('playsinline', '');
+                    videoElem.setAttribute('webkit-playsinline', '');
+                    videoElem.crossOrigin = 'anonymous'; 
+                    videoElem.preload = 'metadata';
                     videoElem.src = videoUrl;
 
                     videoElem.addEventListener('loadedmetadata', () => {
-                        // التقاط الإطار بعد ثانية واحدة (أو المنتصف إذا كان أقصر) لتجنب الإطارات السوداء
                         videoElem.currentTime = Math.min(1, Math.max(0.1, videoElem.duration / 2 || 0));
                     });
 
@@ -629,12 +591,10 @@
                             canvas.height = videoElem.videoHeight || 360;
                             const ctx = canvas.getContext('2d');
                             ctx.drawImage(videoElem, 0, 0, canvas.width, canvas.height);
-                            // تصدير الصورة بجودة 70% للحفاظ على سرعة الأداء
                             resolve(canvas.toDataURL('image/jpeg', 0.7));
                         } catch (e) {
                             reject(e);
                         } finally {
-                            // تنظيف وإيقاف العنصر
                             videoElem.pause();
                             videoElem.removeAttribute('src');
                             videoElem.load();
@@ -645,7 +605,6 @@
                 });
             }
 
-            // تحميل الصور بالتتابع (Sequential) للحفاظ على سرعة الصفحة وعدم التجمد مع 37 فيديو
             async function loadThumbnailsSequentially() {
                 for (let i = 0; i < SITE_DATA.videos.length; i++) {
                     const videoData = SITE_DATA.videos[i];
@@ -659,31 +618,27 @@
                         const thumbDataUrl = await extractThumbnail(videoData.file);
                         img.src = thumbDataUrl;
                         img.style.display = 'block';
-                        fallback.style.display = 'none'; // إخفاء الأيقونة الاحتياطية
+                        fallback.style.display = 'none';
                     } catch (error) {
-                        // في حال تعذر الاستخراج لسبب ما، يتم الإبقاء على الأيقونة الاحتياطية الحالية
                         console.warn('تعذر استخراج صورة للفيديو:', videoData.file);
                     }
                 }
             }
 
-            // بدء عملية الاستخراج مباشرة بعد بناء الواجهة
             setTimeout(loadThumbnailsSequentially, 500);
 
-            // منطق النافذة المنبثقة (Modal) للفيديوهات
             const modal = document.getElementById('videoModal');
             const modalContent = document.getElementById('modalContent');
             const closeModal = document.getElementById('closeModal');
 
             function openVideoModal(fileUrl) {
-                // فتح الفيديو وتخصيصه للتشغيل التلقائي مع preload="metadata"
-                modalContent.innerHTML = `<video src="${fileUrl}" controls autoplay playsinline preload="metadata" style="width: 100%; height: 100%; border-radius: 10px; outline: none; background: #000;"></video>`;
+                // إضافة webkit-playsinline لحل مشكلة توقف/اختفاء الفيديو في متصفح Safari على iPhone
+                modalContent.innerHTML = `<video src="${fileUrl}" controls autoplay playsinline webkit-playsinline preload="metadata" style="width: 100%; height: 100%; border-radius: 10px; outline: none; background: #000;"></video>`;
                 modal.classList.add('active');
                 document.body.style.overflow = 'hidden';
             }
 
             function closeVideoModal() {
-                // إيقاف الفيديو وتفريغه من الذاكرة بالكامل عند الإغلاق
                 const videoElement = modalContent.querySelector('video');
                 if (videoElement) {
                     videoElement.pause();
@@ -696,11 +651,18 @@
             }
 
             closeModal.addEventListener('click', closeVideoModal);
+            // دعم إغلاق النافذة عبر لوحة المفاتيح
+            closeModal.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    closeVideoModal();
+                }
+            });
+
             modal.addEventListener('click', (e) => {
                 if (e.target === modal) closeVideoModal();
             });
 
-            // شريط التقدم وزر العودة للأعلى
             const scrollProgress = document.getElementById('scroll-progress');
             const backToTop = document.getElementById('back-to-top');
 
@@ -727,7 +689,6 @@
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             });
 
-            // تأثيرات الحركة عند التمرير
             const revealElements = document.querySelectorAll('.reveal');
             
             const revealObserver = new IntersectionObserver((entries, observer) => {
@@ -744,7 +705,6 @@
 
             revealElements.forEach(el => revealObserver.observe(el));
 
-            // العدادات المتحركة
             function startCounters(section) {
                 const counters = section.querySelectorAll('.stat-number');
                 counters.forEach(counter => {
@@ -767,7 +727,6 @@
             }
 
         });
-        // ==================== Visitor Counter ====================
 
 async function updateVisitorCounter() {
     try {
@@ -776,7 +735,6 @@ async function updateVisitorCounter() {
         );
 
         const data = await response.json();
-
         const counter = document.getElementById("visitor-count");
 
         if (counter) {
