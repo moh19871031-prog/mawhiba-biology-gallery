@@ -214,12 +214,13 @@
             transform: scale(1.5);
         }
         
-        /* رفع النصوص والزر فوق التأثير الخلفي */
+        /* رفع النصوص والزر فوق التأثير الخلفي وتوسيطها */
         .project-card h3 { 
             font-size: 1.4rem; 
             color: var(--dark-purple); 
             position: relative; 
             z-index: 1; 
+            text-align: center; /* هذا السطر لتوسيط العنوان */
         }
         .project-card p { 
             font-size: 1rem; 
@@ -227,9 +228,10 @@
             flex-grow: 1; 
             position: relative; 
             z-index: 1; 
+            text-align: center; /* هذا السطر لتوسيط النص إن وجد */
         }
         .project-card .btn { 
-            align-self: flex-start; 
+            align-self: center; /* هذا السطر لتوسيط الزر بدلاً من وضعه على الطرف */
             margin-top: 15px; 
             font-size: 0.9rem; 
             padding: 8px 20px; 
