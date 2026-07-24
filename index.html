@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>معرض برنامج موهبة الإثرائي الأكاديمي</title>
+    <!-- استدعاء خط Cairo من Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-purple: #5c2483;      /* لون موهبة البنفسجي الأساسي */
+            --dark-purple: #3a1554;         /* بنفسجي غامق */
+            --light-purple: #9d5abf;        /* بنفسجي فاتح */
+            --white: #ffffff;
+            --off-white: #f5f5f7;
+            --text-dark: #1d1d1f;
+            --text-gray: #86868b;
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.5);
+            --glass-shadow: 0 8px 32px 0 rgba(92, 36, 131, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+            background-color: var(--off-white);
+            color: var(--text-dark);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Scroll Progress Bar */
+        #scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--light-purple), var(--primary-purple));
+            z-index: 9999;
+            transition: width 0.1s ease-out;
+        }
+
+        /* Loading Screen */
+        #loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: var(--primary-purple);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid rgba(255,255,255,0.3);
+            border-top-color: var(--white);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        /* Typography & Utilities */
+        h1, h2, h3 { color: var(--primary-purple); margin-bottom: 20px; font-weight: 700; }
+        .section-title { text-align: center; font-size: 2.5rem; margin-bottom: 3rem; position: relative; padding-bottom: 15px; }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--light-purple);
+            border-radius: 2px;
+        }
+        p { font-size: 1.1rem; color: #4a4a4a; margin-bottom: 15px; }
+        
+        .container { width: 90%; max-width: 1200px; margin: 0 auto; padding: 5rem 0; }
+        
+        /* Glassmorphism Classes */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+        .glass-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px 0 rgba(92, 36, 131, 0.2);
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: linear-gradient(45deg, var(--primary-purple), var(--light-purple));
+            color: var(--white);
+            text-decoration: none;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(92,36,131,0.3);
+        }
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(92,36,131,0.5);
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: linear-gradient(135deg, var(--dark-purple), var(--primary-purple));
+            color: var(--white);
+            position: relative;
+            overflow: hidden;
+            padding: 0 20px;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+            top: -50%;
+            left: -50%;
+            animation: pulseBg 15s infinite alternate;
+        }
+        @keyframes pulseBg {
+            0% { transform: scale(1) translate(0, 0); }
+            100% { transform: scale(1.2) translate(5%, 5%); }
+        }
+        .hero-content {
+            z-index: 2;
+            animation: fadeInDown 1.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        .hero h1 { color: var(--white); font-size: 3.5rem; margin-bottom: 10px; font-weight: 900; }
+        .hero h2 { color: var(--light-purple); font-size: 2rem; margin-bottom: 30px; font-weight: 400; }
+
+        /* Animation Classes (Intersection Observer) */
+        .reveal { opacity: 0; transform: translateY(50px); transition: all 0.8s cubic-bezier(0.5, 0, 0, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        .zoom-reveal { opacity: 0; transform: scale(0.9); transition: all 0.8s cubic-bezier(0.5, 0, 0, 1); }
+        .zoom-reveal.active { opacity: 1; transform: scale(1); }
+
+        /* Sections */
+        .about-section { text-align: center; max-width: 800px; margin: 0 auto; }
+        
+        /* Stats Section */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; text-align: center; margin-top: 40px; }
+        .stat-item { padding: 30px; }
+        .stat-number { font-size: 3.5rem; font-weight: 900; color: var(--primary-purple); display: block; margin-bottom: 10px; }
+        .stat-label { font-size: 1.2rem; font-weight: 600; color: var(--text-gray); }
+
+        /* Grid Layouts for Projects/Videos */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px; }
+        
+        /* Project Cards */
+        .project-card { display: flex; flex-direction: column; justify-content: space-between; height: 100%; }
+        .project-card h3 { font-size: 1.4rem; color: var(--dark-purple); }
+        .project-card p { font-size: 1rem; color: var(--text-gray); flex-grow: 1; }
+        .project-card .btn { align-self: flex-start; margin-top: 15px; font-size: 0.9rem; padding: 8px 20px; }
+
+        /* Video Cards */
+        .video-card { cursor: pointer; text-align: center; position: relative; overflow: hidden; }
+        .video-thumbnail-placeholder {
+            width: 100%;
+            height: 180px;
+            background: linear-gradient(45deg, #e0e0e0, #f5f5f7);
+            border-radius: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        .play-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(255,255,255,0.8);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.3s ease;
+        }
+        .play-icon::after {
+            content: '';
+            border-style: solid;
+            border-width: 12px 0 12px 20px;
+            border-color: transparent transparent transparent var(--primary-purple);
+            margin-left: 5px;
+        }
+        .video-card:hover .play-icon { transform: scale(1.1); background: var(--white); box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+
+        /* Modal for Videos */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.9);
+            z-index: 100000;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .modal.active { display: flex; opacity: 1; }
+        .modal-content {
+            width: 90%; max-width: 900px;
+            background: #000;
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            aspect-ratio: 16/9;
+        }
+        .close-modal {
+            position: absolute;
+            top: 20px; right: 30px;
+            color: #fff; font-size: 40px;
+            cursor: pointer; z-index: 100001;
+            transition: color 0.3s;
+        }
+        .close-modal:hover { color: var(--light-purple); }
+        .modal video { width: 100%; height: 100%; border: none; outline: none; border-radius: 10px; background: #000; }
+
+        /* Padlet Section */
+        .padlet-container { width: 100%; height: 600px; border-radius: 20px; overflow: hidden; box-shadow: var(--glass-shadow); }
+        .padlet-container iframe { width: 100%; height: 100%; border: none; }
+
+        /* Honor Roll */
+        .honor-roll-list { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; }
+        .honor-badge {
+            background: var(--white);
+            color: var(--primary-purple);
+            padding: 10px 25px;
+            border-radius: 30px;
+            font-weight: 700;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s ease;
+        }
+        .honor-badge:hover { background: var(--primary-purple); color: var(--white); transform: translateY(-5px); }
+
+        /* Footer */
+        footer {
+            background: var(--dark-purple);
+            color: var(--white);
+            text-align: center;
+            padding: 4rem 2rem 2rem;
+            position: relative;
+        }
+        footer::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 5px;
+            background: linear-gradient(90deg, var(--light-purple), var(--primary-purple));
+        }
+        .footer-content { max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 15px; }
+        .footer-content h3 { color: var(--white); margin-bottom: 5px; font-size: 1.5rem; }
+        .footer-content p { color: #d1b3e0; font-size: 1rem; margin-bottom: 5px; }
+        .copyright { margin-top: 30px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); color: #a980c2; font-size: 0.9rem; }
+
+        /* Back to Top */
+        #back-to-top {
+            position: fixed; bottom: 30px; right: 30px;
+            width: 50px; height: 50px;
+            background: var(--primary-purple); color: white;
+            border-radius: 50%; display: flex; justify-content: center; align-items: center;
+            text-decoration: none; font-size: 24px; font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            opacity: 0; visibility: hidden; transition: all 0.3s ease;
+            z-index: 999;
+        }
+        #back-to-top.show { opacity: 1; visibility: visible; }
+        #back-to-top:hover { transform: translateY(-5px); background: var(--dark-purple); }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.2rem; }
+            .hero h2 { font-size: 1.4rem; }
+            .section-title { font-size: 2rem; }
+            .container { padding: 3rem 0; width: 95%; }
+            .stat-number { font-size: 2.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- شريط تقدم التمرير -->
+    <div id="scroll-progress"></div>
+
+    <!-- شاشة التحميل -->
+    <div id="loader">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- النافذة المنبثقة للفيديوهات -->
+    <div class="modal" id="videoModal">
+        <span class="close-modal" id="closeModal">&times;</span>
+        <div class="modal-content" id="modalContent">
+            <!-- سيتم حقن كود video هنا عبر JavaScript -->
+        </div>
+    </div>
+
+    <!-- زر العودة للأعلى -->
+    <a href="#" id="back-to-top">&uarr;</a>
+
+    <!-- القسم الرئيسي (Hero) -->
+    <header class="hero">
+        <div class="hero-content">
+            <h1>معرض برنامج موهبة الإثرائي الأكاديمي</h1>
+            <h2>كن عالماً في الأحياء والعلوم الطبية</h2>
+            
+            <div style="margin-bottom: 40px;">
+                <p style="color: var(--white); font-size: 1.2rem; margin-bottom: 5px;">إعداد وتصميم</p>
+                <h3 style="color: var(--white); font-size: 1.8rem; margin-bottom: 5px; font-weight: 700;">محمد هاشم القثامى</h3>
+                <p style="color: var(--light-purple); font-size: 1.1rem; margin-bottom: 0;">مدرب الوحدة</p>
+            </div>
+
+            <a href="#about" class="btn" id="startTour">ابدأ الجولة</a>
+        </div>
+    </header>
+
+    <!-- نبذة عن البرنامج -->
+    <section id="about" class="container reveal">
+        <div class="glass-card about-section">
+            <h2 class="section-title">نبذة عن البرنامج</h2>
+            <p>
+                يهدف برنامج "كن عالماً في الأحياء والعلوم الطبية" إلى إثراء معرفة الطلبة الموهوبين في مجالات العلوم الحيوية والطبية، وتنمية مهارات البحث العلمي والتفكير الناقد، وتهيئتهم للمساهمة في بناء مجتمع معرفي رائد.
+            </p>
+        </div>
+    </section>
+
+    <!-- رسالة ترحيبية -->
+    <section class="container reveal zoom-reveal">
+        <div class="glass-card" style="text-align: center;">
+            <h2 class="section-title">رسالة ترحيبية</h2>
+            <p style="font-size: 1.3rem; font-weight: 600; color: var(--dark-purple);">
+                أهلاً بكم في معرضنا الرقمي.
+            </p>
+            <p>
+                هذا المعرض هو ثمرة جهود وإبداعات نخبة من الطلاب الموهوبين. ندعوكم لتصفح مشاريعهم وعروضهم التي تعكس شغفهم بالعلوم الطبية والأحياء.
+            </p>
+        </div>
+    </section>
+
+    <!-- الإحصائيات -->
+    <section class="container reveal">
+        <h2 class="section-title">إحصائيات البرنامج</h2>
+        <div class="stats-grid">
+            <div class="glass-card stat-item">
+                <span class="stat-number" data-target="37">0</span>
+                <span class="stat-label">فيديو علمي</span>
+            </div>
+            <div class="glass-card stat-item">
+                <span class="stat-number" data-target="19">0</span>
+                <span class="stat-label">مشروع </span>
+            </div>
+            <div class="glass-card stat-item">
+                <span class="stat-number" data-target="608">0</span>
+                <span class="stat-label">عمل إبداعي في Padlet</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- لوحة الشرف -->
+    <section class="container reveal">
+        <div class="glass-card">
+            <h2 class="section-title">لوحة الشرف</h2>
+            <p style="text-align: center; margin-bottom: 30px;">نعتز بجميع طلابنا الموهوبين الذين شاركوا في هذا البرنامج المميز.</p>
+            <div class="honor-roll-list" id="honorRollContainer">
+                <!-- سيتم حقن أسماء الطلاب هنا -->
+            </div>
+        </div>
+    </section>
+
+    <!-- معرض المشاريع -->
+    <section class="container reveal">
+        <h2 class="section-title">معرض المشاريع (19 مشروع)</h2>
+        <div class="grid" id="projectsContainer">
+            <!-- سيتم حقن المشاريع هنا عبر JavaScript -->
+        </div>
+    </section>
+
+    <!-- معرض الفيديوهات -->
+    <section class="container reveal">
+        <h2 class="section-title">معرض الفيديوهات (37 فيديو)</h2>
+        <div class="grid" id="videosContainer">
+            <!-- سيتم حقن الفيديوهات هنا عبر JavaScript -->
+        </div>
+    </section>
+
+    <!-- معرض Padlet -->
+    <section class="container reveal zoom-reveal">
+        <h2 class="section-title">إبداعات الطلاب (Padlet)</h2>
+        <p style="text-align: center; margin-bottom: 30px;">أكثر من 608 عمل وصورة وفيديو وتعليق تم جمعها في لوحة التفاعل.</p>
+        <div class="padlet-container" id="padletContainer">
+            <iframe id="padletIframe" frameborder="0" allow="camera;microphone;geolocation"></iframe>
+        </div>
+    </section>
+
+    <!-- رسالة شكر -->
+    <section class="container reveal">
+        <div class="glass-card about-section">
+            <h2 class="section-title">رسالة شكر</h2>
+            <p>
+                شكر خاص لجميع القيادات والمشرفين في مؤسسة الملك عبدالعزيز ورجاله للموهبة والإبداع (موهبة) على دعمهم المستمر ورعايتهم للطلبة الموهوبين، والشكر موصول لأبنائنا الطلاب وأولياء أمورهم على جهودهم الرائعة.
+            </p>
+        </div>
+    </section>
+    <!-- ===== رأيكم يصنع الفرق ===== -->
+
+<section id="feedback" class="section">
+    <div class="container">
+        <div class="section-title">
+            <h2>💬 رأيكم يصنع الفرق</h2>
+            <p>نسعد بمشاركتكم انطباعاتكم ومقترحاتكم لتطوير المعرض مستقبلاً.</p>
+        </div>
+
+        <div style="
+            background:white;
+            border-radius:20px;
+            overflow:hidden;
+            box-shadow:0 15px 40px rgba(0,0,0,.12);
+            margin-top:30px;
+        ">
+
+            <iframe
+                src="https://docs.google.com/forms/d/e/1FAIpQLScB-ogzsG3CaVWITE73Jrb8QYCUrOKU49GcXTGgGChTAuA8wg/viewform?embedded=true"
+                width="100%"
+                height="1924"
+                frameborder="0"
+                marginheight="0"
+                marginwidth="0">
+                جارٍ التحميل…
+            </iframe>
+
+        </div>
+    </div>
+</section>
+<div style="text-align:center;margin:20px 0;">
+    <div style="
+        display:inline-flex;
+        align-items:center;
+        gap:10px;
+        background:rgba(255,255,255,.9);
+        padding:12px 25px;
+        border-radius:50px;
+        box-shadow:0 10px 30px rgba(92,45,145,.15);
+        font-size:1.1rem;
+        font-weight:700;
+        color:#5C2D91;">
+        👁️
+        <span>زوار المعرض</span>
+        <span id="visitor-count">0</span>
+    </div>
+</div>
+    <!-- التذييل (Footer) -->
+    <footer>
+        <div class="footer-content">
+            <h3>برنامج موهبة الإثرائي الأكاديمي</h3>
+            <p>كن عالماً في الأحياء والعلوم الطبية</p>
+            <p style="margin-top: 15px; font-weight: bold; color: var(--white);">مدرب الوحدة</p>
+            <p style="font-size: 1.1rem; color: var(--light-purple); font-weight: bold;">محمد هاشم القثامى</p>
+            <p style="font-size: 0.9rem; margin-top: 10px;">تم تصميم هذا المعرض الإلكتروني خصيصاً لعرض إنجازات الطلبة في برنامج "كن عالماً في الأحياء والعلوم الطيبة 2026".</p>
+            <div class="copyright">
+                &copy; جميع الحقوق محفوظة لمحمد هاشم القثامى
+                <br>
+                2026
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript المدمج -->
+    <script>
+        // رابط Padlet المركزي
+        const PADLET_URL = "https://padlet.com/embed/s19nnep4u94hryg1/slideshow?autoplay=1&loop=1&duration=2";
+
+        const SITE_DATA = {
+            // بيانات المشاريع
+            projects: Array.from({length: 19}, (_, i) => ({
+                title: `مشاريع الأبطال ${i + 1}`,
+                file: `projects/project${i + 1}.pdf`
+            })),
+
+            // بيانات الفيديوهات
+            videos: Array.from({length: 37}, (_, i) => ({
+                title: `منجزات الأبطال ${String(i + 1).padStart(2, '0')}`,
+                file: `videos/video${i + 1}.mp4`
+            })),
+
+            // أسماء لوحة الشرف
+            honorRoll: [
+    "🏅 الدكتور إبراهيم محمد قاسم",
+    "🏅 الدكتور إيساف إبراهيم مسعود",
+    "🏅 الضابط تركي عبدالله حدادي",
+    "🏅 الدكتور حسين علي الحسين",
+    "🏅 المحامي خالد حسن عشري",
+    "🏅 الدكتور راكان حسن حامظي",
+    "🏅 الدكتور سعيد سلطان الأكلبي",
+    "🏅 الأستاذ سلطان سعيد الطف",
+    "🏅 المهندس صالح علي الشلعان",
+    "🏅 المخترع عبدالعزيز محمد المقرب",
+    "🏅 الدكتور عبدالله عبدالرحمن الربيعة",
+    "🏅 الدكتور عبدالملك مشبب السبيعي",
+    "🏅 الضابط عمر خضر العمراني",
+    "🏅 الدكتور غيث مرضي الزهراني",
+    "🏅 الضابط مالك سليمان الربعي",
+    "🏅 إمام الحرم محمد أنور بخش",
+    "🏅 المخترع محمد صالح النوشان",
+    "🏅 الطيار محمد يحيى الطراف",
+    "🏅 الطيار يزن أحمد الأحمدي",
+    "🏅 المهندس يزن رامي حامد",
+    "🏅 الطيار يزيد خالد الفيفي"
+]
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // إخفاء شاشة التحميل
+            setTimeout(() => {
+                const loader = document.getElementById('loader');
+                loader.style.opacity = '0';
+                setTimeout(() => loader.style.display = 'none', 800);
+            }, 1000);
+
+            // إعداد رابط Padlet
+            document.getElementById('padletIframe').src = PADLET_URL;
+
+            // بناء لوحة الشرف
+            const honorContainer = document.getElementById('honorRollContainer');
+            SITE_DATA.honorRoll.forEach(name => {
+                const span = document.createElement('span');
+                span.className = 'honor-badge';
+                span.textContent = name;
+                honorContainer.appendChild(span);
+            });
+
+            // بناء معرض المشاريع
+            const projectsContainer = document.getElementById('projectsContainer');
+            SITE_DATA.projects.forEach(project => {
+                const card = document.createElement('div');
+                card.className = 'glass-card project-card';
+                card.innerHTML = `
+                    <h3>${project.title}</h3>
+                    <a href="${project.file}" target="_blank" class="btn">عرض المشروع</a>
+                `;
+                projectsContainer.appendChild(card);
+            });
+
+            // بناء معرض الفيديوهات مع الهيكل الجديد للصور المستخرجة والتأثيرات
+            const videosContainer = document.getElementById('videosContainer');
+            SITE_DATA.videos.forEach((video, index) => {
+                const card = document.createElement('div');
+                card.className = 'glass-card video-card';
+                card.id = `video-card-${index}`;
+                
+                card.innerHTML = `
+                    <div class="video-thumbnail-container" style="position: relative; width: 100%; height: 180px; border-radius: 10px; overflow: hidden; margin-bottom: 15px; background: #000;">
+                        
+                        <!-- الصورة المستخرجة تلقائياً (تكون مخفية حتى يتم تحميلها) -->
+                        <img class="dynamic-thumbnail" style="width: 100%; height: 100%; object-fit: cover; display: none;" alt="${video.title}" />
+                        
+                        <!-- الأيقونة الاحتياطية تظهر في البداية وإذا فشل الاستخراج -->
+                        <div class="video-thumbnail-placeholder fallback-placeholder" style="width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; background: linear-gradient(45deg, #e0e0e0, #f5f5f7); margin: 0; border-radius: 0;">
+                            <div class="play-icon"></div>
+                        </div>
+                        
+                        <!-- الطبقة الشفافة مع زر التشغيل الكبير عند المرور -->
+                        <div class="video-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.25); display: flex; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.3s ease;">
+                            <div class="play-icon" style="background: rgba(255,255,255,0.9); transform: scale(1.3);"></div>
+                        </div>
+                    </div>
+                    
+                    <h3 style="font-size: 1.2rem; margin:0; position: relative; z-index: 2;">${video.title}</h3>
+                `;
+                
+                // إضافة أحداث Hover برمجياً لعدم تغيير كود CSS الأساسي
+                const overlay = card.querySelector('.video-overlay');
+                card.addEventListener('mouseenter', () => { overlay.style.opacity = '1'; });
+                card.addEventListener('mouseleave', () => { overlay.style.opacity = '0'; });
+
+                // فتح الفيديو عند الضغط
+                card.addEventListener('click', () => openVideoModal(video.file));
+                videosContainer.appendChild(card);
+            });
+
+            // منطق استخراج الصورة من إطار الفيديو (Thumbnail)
+            function extractThumbnail(videoUrl) {
+                return new Promise((resolve, reject) => {
+                    const videoElem = document.createElement('video');
+                    videoElem.style.display = 'none';
+                    videoElem.muted = true;
+                    videoElem.playsInline = true;
+                    videoElem.preload = 'metadata'; // تحميل البيانات الوصفية فقط للأداء
+                    videoElem.src = videoUrl;
+
+                    videoElem.addEventListener('loadedmetadata', () => {
+                        // التقاط الإطار بعد ثانية واحدة (أو المنتصف إذا كان أقصر) لتجنب الإطارات السوداء
+                        videoElem.currentTime = Math.min(1, Math.max(0.1, videoElem.duration / 2 || 0));
+                    });
+
+                    videoElem.addEventListener('seeked', () => {
+                        try {
+                            const canvas = document.createElement('canvas');
+                            canvas.width = videoElem.videoWidth || 640;
+                            canvas.height = videoElem.videoHeight || 360;
+                            const ctx = canvas.getContext('2d');
+                            ctx.drawImage(videoElem, 0, 0, canvas.width, canvas.height);
+                            // تصدير الصورة بجودة 70% للحفاظ على سرعة الأداء
+                            resolve(canvas.toDataURL('image/jpeg', 0.7));
+                        } catch (e) {
+                            reject(e);
+                        } finally {
+                            // تنظيف وإيقاف العنصر
+                            videoElem.pause();
+                            videoElem.removeAttribute('src');
+                            videoElem.load();
+                        }
+                    });
+
+                    videoElem.addEventListener('error', (e) => reject(e));
+                });
+            }
+
+            // تحميل الصور بالتتابع (Sequential) للحفاظ على سرعة الصفحة وعدم التجمد مع 37 فيديو
+            async function loadThumbnailsSequentially() {
+                for (let i = 0; i < SITE_DATA.videos.length; i++) {
+                    const videoData = SITE_DATA.videos[i];
+                    const card = document.getElementById(`video-card-${i}`);
+                    if (!card) continue;
+                    
+                    const img = card.querySelector('.dynamic-thumbnail');
+                    const fallback = card.querySelector('.fallback-placeholder');
+
+                    try {
+                        const thumbDataUrl = await extractThumbnail(videoData.file);
+                        img.src = thumbDataUrl;
+                        img.style.display = 'block';
+                        fallback.style.display = 'none'; // إخفاء الأيقونة الاحتياطية
+                    } catch (error) {
+                        // في حال تعذر الاستخراج لسبب ما، يتم الإبقاء على الأيقونة الاحتياطية الحالية
+                        console.warn('تعذر استخراج صورة للفيديو:', videoData.file);
+                    }
+                }
+            }
+
+            // بدء عملية الاستخراج مباشرة بعد بناء الواجهة
+            setTimeout(loadThumbnailsSequentially, 500);
+
+            // منطق النافذة المنبثقة (Modal) للفيديوهات
+            const modal = document.getElementById('videoModal');
+            const modalContent = document.getElementById('modalContent');
+            const closeModal = document.getElementById('closeModal');
+
+            function openVideoModal(fileUrl) {
+                // فتح الفيديو وتخصيصه للتشغيل التلقائي مع preload="metadata"
+                modalContent.innerHTML = `<video src="${fileUrl}" controls autoplay playsinline preload="metadata" style="width: 100%; height: 100%; border-radius: 10px; outline: none; background: #000;"></video>`;
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeVideoModal() {
+                // إيقاف الفيديو وتفريغه من الذاكرة بالكامل عند الإغلاق
+                const videoElement = modalContent.querySelector('video');
+                if (videoElement) {
+                    videoElement.pause();
+                    videoElement.removeAttribute('src');
+                    videoElement.load();
+                }
+                modal.classList.remove('active');
+                modalContent.innerHTML = '';
+                document.body.style.overflow = 'auto';
+            }
+
+            closeModal.addEventListener('click', closeVideoModal);
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) closeVideoModal();
+            });
+
+            // شريط التقدم وزر العودة للأعلى
+            const scrollProgress = document.getElementById('scroll-progress');
+            const backToTop = document.getElementById('back-to-top');
+
+            window.addEventListener('scroll', () => {
+                const scrollTop = window.scrollY;
+                const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+                const scrollPercent = (scrollTop / docHeight) * 100;
+                scrollProgress.style.width = `${scrollPercent}%`;
+
+                if (scrollTop > 300) {
+                    backToTop.classList.add('show');
+                } else {
+                    backToTop.classList.remove('show');
+                }
+            });
+
+            document.getElementById('startTour').addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector('#about').scrollIntoView({ behavior: 'smooth' });
+            });
+
+            backToTop.addEventListener('click', function(e) {
+                e.preventDefault();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+
+            // تأثيرات الحركة عند التمرير
+            const revealElements = document.querySelectorAll('.reveal');
+            
+            const revealObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        if(entry.target.querySelector('.stat-number')){
+                            startCounters(entry.target);
+                        }
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.15 });
+
+            revealElements.forEach(el => revealObserver.observe(el));
+
+            // العدادات المتحركة
+            function startCounters(section) {
+                const counters = section.querySelectorAll('.stat-number');
+                counters.forEach(counter => {
+                    const target = +counter.getAttribute('data-target');
+                    const duration = 2000;
+                    const increment = target / (duration / 16);
+                    
+                    let current = 0;
+                    const updateCounter = () => {
+                        current += increment;
+                        if (current < target) {
+                            counter.innerText = Math.ceil(current);
+                            requestAnimationFrame(updateCounter);
+                        } else {
+                            counter.innerText = target;
+                        }
+                    };
+                    updateCounter();
+                });
+            }
+
+        });
+        // ==================== Visitor Counter ====================
+
+async function updateVisitorCounter() {
+    try {
+        const response = await fetch(
+            "https://api.countapi.xyz/hit/mawhiba-bio-gallery-2026/visits"
+        );
+
+        const data = await response.json();
+
+        const counter = document.getElementById("visitor-count");
+
+        if (counter) {
+            counter.textContent = data.value;
+        }
+
+    } catch (e) {
+        const counter = document.getElementById("visitor-count");
+
+        if (counter) {
+            counter.textContent = "--";
+        }
+    }
+}
+
+updateVisitorCounter();
+    </script>
+</body>
+</html>
