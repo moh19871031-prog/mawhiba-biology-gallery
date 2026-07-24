@@ -300,16 +300,6 @@
             .container { padding: 3rem 0; width: 95%; }
             .stat-number { font-size: 2.5rem; }
         }
-        /* خلفية لوحة الشرف الفاخرة */
-        #honor-card {
-            background: 
-                radial-gradient(circle at 10% 20%, rgba(157, 90, 191, 0.2) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(92, 36, 131, 0.2) 0%, transparent 40%),
-                rgba(255, 255, 255, 0.9) !important;
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid var(--glass-border);
-        }
     </style>
 </head>
 <body>
@@ -384,11 +374,13 @@
         </div>
     </section>
 
+    <!-- لوحة الشرف -->
     <section class="container reveal">
-        <div class="glass-card">
+        <div class="glass-card" style="background: linear-gradient(135deg, rgba(157, 90, 191, 0.2), rgba(92, 36, 131, 0.2)), rgba(255, 255, 255, 0.95); border: 2px solid rgba(157, 90, 191, 0.4); box-shadow: 0 10px 30px rgba(92, 36, 131, 0.15);">
             <h2 class="section-title">لوحة الشرف</h2>
             <p style="text-align: center; margin-bottom: 30px;">نعتز بجميع طلابنا الموهوبين الذين شاركوا في هذا البرنامج المميز.</p>
             <div class="honor-roll-list" id="honorRollContainer">
+                <!-- سيتم حقن أسماء الطلاب هنا -->
             </div>
         </div>
     </section>
