@@ -779,17 +779,18 @@
 
         });
 
+// ==================== Visitor Counter ====================
 async function updateVisitorCounter() {
     try {
         const response = await fetch(
-            "https://api.countapi.xyz/hit/mawhiba-bio-gallery-2026/visits"
+            "https://api.counterapi.dev/v1/mawhiba-bio-gallery-2026/visits/up"
         );
 
         const data = await response.json();
         const counter = document.getElementById("visitor-count");
 
         if (counter) {
-            counter.textContent = data.value;
+            counter.textContent = data.count;
         }
 
     } catch (e) {
